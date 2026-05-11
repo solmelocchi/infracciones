@@ -1,0 +1,125 @@
+### ====================================
+### TIPOS DE INFRACCION
+### ====================================
+
+### Ver todos los tipos (los 10 cargados por DataInitializer)
+GET http://localhost:8080/api/v1/tipos
+Accept: application/json
+
+### Ver tipo por id
+GET http://localhost:8080/api/v1/tipos/1
+Accept: application/json
+
+### Crear tipo nuevo
+POST http://localhost:8080/api/v1/tipos
+Content-Type: application/json
+
+{
+  "denominacion": "Conducción temeraria",
+  "tipo": "Grave",
+  "importeBase": 90000.0,
+  "porcentajeDescuento": 0.0
+}
+
+### Actualizar tipo
+PUT http://localhost:8080/api/v1/tipos/1
+Content-Type: application/json
+
+{
+  "denominacion": "Alcoholemia positiva actualizada",
+  "tipo": "Grave",
+  "importeBase": 85000.0,
+  "porcentajeDescuento": 0.0
+}
+
+### Eliminar tipo
+DELETE http://localhost:8080/api/v1/tipos/11
+
+
+### ====================================
+### CONDUCTORES
+### ====================================
+
+### Ver todos los conductores
+GET http://localhost:8080/api/v1/conductores
+Accept: application/json
+
+### Crear conductor Sol
+POST http://localhost:8080/api/v1/conductores
+Content-Type: application/json
+
+{
+  "nombre": "Sol",
+  "apellido": "Melocchi",
+  "dni": "45678912",
+  "domicilio": "Godoy Cruz, Mendoza",
+  "numeroLicencia": "LIC-001"
+}
+
+### Crear conductor Ignacio
+POST http://localhost:8080/api/v1/conductores
+Content-Type: application/json
+
+{
+  "nombre": "Ignacio",
+  "apellido": "Bertone",
+  "dni": "43811825",
+  "domicilio": "Lujan de Cuyo, Mendoza",
+  "numeroLicencia": "LIC-002"
+}
+
+### Ver conductor por id
+GET http://localhost:8080/api/v1/conductores/1
+Accept: application/json
+
+
+### ====================================
+### INFRACCIONES
+### ====================================
+
+### Ver todas las infracciones
+GET http://localhost:8080/api/v1/infracciones
+Accept: application/json
+
+### Crear infraccion (conductor id 1, tipo id 1 = Alcoholemia)
+POST http://localhost:8080/api/v1/infracciones
+Content-Type: application/json
+
+{
+  "descripcion": "Conductor detenido con 1.2 g/L de alcohol en sangre",
+  "importe": 80000.0,
+  "fecha": "2026-05-07",
+  "conductor": { "id": 1 },
+  "tipos": [{ "id": 1 }]
+}
+
+### Crear infraccion con 2 tipos (Alcoholemia + Sin cinturon)
+POST http://localhost:8080/api/v1/infracciones
+Content-Type: application/json
+
+{
+  "descripcion": "Múltiples infracciones detectadas",
+  "importe": 110000.0,
+  "fecha": "2026-05-07",
+  "conductor": { "id": 2 },
+  "tipos": [{ "id": 1 }, { "id": 4 }]
+}
+
+### Filtrar infracciones GRAVES
+GET http://localhost:8080/api/v1/infracciones/tipo/Grave
+Accept: application/json
+
+### Filtrar infracciones MEDIAS
+GET http://localhost:8080/api/v1/infracciones/tipo/Media
+Accept: application/json
+
+### Filtrar infracciones LEVES
+GET http://localhost:8080/api/v1/infracciones/tipo/Leve
+Accept: application/json
+
+### Ver infracciones de conductor id 1
+GET http://localhost:8080/api/v1/infracciones/conductor/1
+Accept: application/json
+
+### Eliminar infraccion
+DELETE http://localhost:8080/api/v1/infracciones/1

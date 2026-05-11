@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Infracciones de Tránsito</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- ============================
+     NAVBAR
+============================ -->
+<nav class="navbar">
+  <div class="navbar-brand">
+    <div class="navbar-logo">🚔</div>
+    <div>
+      <div class="navbar-title">Sistema de Infracciones</div>
+      <div class="navbar-subtitle">Gestión de Infracciones de Tránsito</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================
+      MENÚ PRINCIPAL
+============================ -->
+<section id="seccion-menu">
+  <h2 class="seccion-titulo">¿Qué querés cargar?</h2>
+  <p class="seccion-subtitulo">Seleccioná una opción para continuar</p>
+
+  <div class="menu-grid">
+    <!-- Infracción -->
+    <div class="menu-card" onclick="mostrarCargar()">
+      <div class="menu-card-icon"></div>
+      <div class="menu-card-label">Infracción</div>
+    </div>
+
+    <!--Ver infracciones -->
+    <div class="menu-card" onclick="mostrarVer()">
+      <div class="menu-card-icon"></div>
+      <div class="menu-card-label">Ver Infracciones</div>
+    </div>
+
+    <!-- DESHABILITADOS -->
+    <div class="menu-card deshabilitado">
+      <div class="menu-card-icon"></div>
+      <div class="menu-card-label">Acta</div>
+    </div>
+
+    <div class="menu-card deshabilitado">
+      <div class="menu-card-icon"></div>
+      <div class="menu-card-label">Autoridad</div>
+    </div>
+
+    <div class="menu-card deshabilitado">
+      <div class="menu-card-icon"></div>
+      <div class="menu-card-label">Conductor</div>
+    </div>
+
+    <div class="menu-card deshabilitado">
+      <div class="menu-card-icon"></div>
+      <div class="menu-card-label">Vehículo</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================
+      CARGAR INFRACCIÓN
+============================ -->
+<section id="seccion-cargar">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-titulo">Nueva Infracción</h3>
+      <button class="btn-volver" onclick="mostrarMenu()">← Volver</button>
+    </div>
+
+    <form id="form-infraccion" onsubmit="guardarInfraccion(event)">
+
+      <!-- Conductor -->
+      <div class="form-group">
+        <label class="form-label">Conductor *</label>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <select id="select-conductor" class="form-control" required>
+            <option value="">Seleccioná un conductor...</option>
+          </select>
+          <button type="button" class="btn btn-celeste"
+                  style="white-space:nowrap; padding: 12px 16px;"
+                  onclick="toggleFormConductor()">
+            + Nuevo
+          </button>
+        </div>
+      </div>
+
+      <!-- Mini formulario conductor (oculto por defecto) -->
+      <div id="form-conductor-nuevo" style="display:none; background:#f0f7fa;
+     border: 2px solid var(--celeste); border-radius:10px;
+     padding:20px; margin-bottom:20px;">
+
+        <p style="color:var(--azul); font-size:13px; text-transform:uppercase;
+              letter-spacing:1px; margin-bottom:15px; font-weight:bold;">
+          ➕ Nuevo Conductor
+        </p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nombre *</label>
+            <input type="text" id="nuevo-nombre" class="form-control"
+                   placeholder="Ej: Juan" required minlength="2">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Apellido *</label>
+            <input type="text" id="nuevo-apellido" class="form-control"
+                   placeholder="Ej: Pérez" required minlength="2">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">DNI *</label>
+            <input type="number" id="nuevo-dni" class="form-control"
+                   placeholder="Ej: 38123456" required
+                   min="1000000" max="99999999">
+          </div>
+          <div class="form-group">
+            <label class="form-label">N° Licencia *</label>
+            <input type="text" id="nuevo-licencia" class="form-control"
+                   placeholder="Ej: LIC-003" required minlength="3">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Domicilio *</label>
+          <input type="text" id="nuevo-domicilio" class="form-control"
+                 placeholder="Ej: San Martín 1234, Mendoza" required minlength="5">
+        </div>
+
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:5px;">
+          <button type="button" class="btn btn-secondary"
+                  onclick="toggleFormConductor()">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-primary"
+                  onclick="guardarConductorNuevo()">
+            ✔ Guardar Conductor
+          </button>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="form-group">
+        <label class="form-label">Descripción de la infracción</label>
+        <textarea id="input-descripcion" class="form-control"
+                  rows="3" placeholder="Describí brevemente la infracción..."></textarea>
+      </div>
+
+      <!-- Importe y Fecha -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Importe ($) *</label>
+          <input type="number" id="input-importe" class="form-control"
+                 placeholder="Ej: 80000" min="0" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fecha *</label>
+          <input type="date" id="input-fecha" class="form-control" required
+                 max="">
+        </div>
+      </div>
+
+      <!-- Tipos de infracción -->
+      <div class="form-group">
+        <label class="form-label">Tipos de infracción * (seleccioná uno o más)</label>
+        <div id="tipos-grid" class="tipos-grid">
+          <div class="spinner">Cargando tipos...</div>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary" onclick="mostrarMenu()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">
+          ✔ Guardar Infracción
+        </button>
+      </div>
+
+    </form>
+  </div>
+</section>
+
+<!-- ============================
+      VER INFRACCIONES
+============================ -->
+<section id="seccion-ver">
+  <div class="card-header" style="padding: 0 0 20px 0;">
+    <h3 class="card-titulo" style="font-size:22px;">Infracciones Registradas</h3>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <button class="btn btn-celeste" onclick="mostrarCargar()">+ Nueva Infracción</button>
+      <button class="btn-volver" onclick="mostrarMenu()">← Volver</button>
+    </div>
+  </div>
+
+  <!-- Contadores -->
+  <div id="contadores" style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:15px;"></div>
+
+  <!-- Filtros -->
+  <div class="filtros-bar">
+    <span class="filtros-label">Filtrar por:</span>
+    <button class="btn-filtro activo" onclick="filtrar('todas', this)">Todas</button>
+    <button class="btn-filtro grave" onclick="filtrar('Grave', this)">🔴 Graves</button>
+    <button class="btn-filtro media" onclick="filtrar('Media', this)">🟡 Medias</button>
+    <button class="btn-filtro leve" onclick="filtrar('Leve', this)">🟢 Leves</button>
+  </div>
+
+  <!-- Tabla -->
+  <div class="tabla-container">
+    <table class="tabla-infracciones">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Conductor</th>
+        <th>DNI</th>
+        <th>Descripción</th>
+        <th>Tipos</th>
+        <th>Importe</th>
+        <th>Fecha</th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody id="tabla-body">
+      <tr>
+        <td colspan="8" class="tabla-vacia">
+          <div class="spinner">Cargando infracciones...</div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Toast de notificaciones -->
+<div id="toast" class="toast"></div>
+
+<!-- Scripts -->
+<script th:src="@{/js/config.js}"></script>
+<script th:src="@{/js/app.js}"></script>
+
+<script>
+  function toggleFormConductor() {
+    const form = document.getElementById('form-conductor-nuevo');
+    const visible = form.style.display !== 'none';
+    form.style.display = visible ? 'none' : 'block';
+
+    if (visible) {
+      document.getElementById('nuevo-nombre').value = '';
+      document.getElementById('nuevo-apellido').value = '';
+      document.getElementById('nuevo-dni').value = '';
+      document.getElementById('nuevo-licencia').value = '';
+      document.getElementById('nuevo-domicilio').value = '';
+    }
+  }
+
+  async function guardarConductorNuevo() {
+    const nombre = document.getElementById('nuevo-nombre').value.trim();
+    const apellido = document.getElementById('nuevo-apellido').value.trim();
+    const dni = document.getElementById('nuevo-dni').value.trim();
+    const licencia = document.getElementById('nuevo-licencia').value.trim();
+    const domicilio = document.getElementById('nuevo-domicilio').value.trim();
+
+    // Validaciones individuales con mensajes específicos
+    if (!nombre || nombre.length < 2) {
+      mostrarToast('El nombre es obligatorio (mínimo 2 caracteres)', 'error');
+      document.getElementById('nuevo-nombre').focus();
+      return;
+    }
+    if (!apellido || apellido.length < 2) {
+      mostrarToast(' El apellido es obligatorio (mínimo 2 caracteres)', 'error');
+      document.getElementById('nuevo-apellido').focus();
+      return;
+    }
+    if (!dni || dni.length < 7 || dni.length > 8) {
+      mostrarToast('El DNI debe tener 8 dígitos', 'error');
+      document.getElementById('nuevo-dni').focus();
+      return;
+    }
+    if (!licencia || licencia.length < 3) {
+      mostrarToast(' El número de licencia es obligatorio', 'error');
+      document.getElementById('nuevo-licencia').focus();
+      return;
+    }
+    if (!domicilio || domicilio.length < 5) {
+      mostrarToast('El domicilio es obligatorio', 'error');
+      document.getElementById('nuevo-domicilio').focus();
+      return;
+    }
+
+    const conductor = {
+      nombre,
+      apellido,
+      dni: parseInt(dni),
+      numeroLicencia: licencia,
+      domicilio
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/conductores`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(conductor)
+      });
+
+      if (res.ok) {
+        const nuevo = await res.json();
+        mostrarToast(`✅ Conductor ${nombre} ${apellido} guardado`);
+
+        // Agregar al select y seleccionarlo automáticamente
+        const select = document.getElementById('select-conductor');
+        const option = document.createElement('option');
+        option.value = nuevo.id;
+        option.textContent = `${nuevo.nombre} ${nuevo.apellido} — DNI: ${nuevo.dni}`;
+        select.appendChild(option);
+        select.value = nuevo.id;
+
+        toggleFormConductor();
+      } else if (res.status === 500) {
+        mostrarToast('El DNI ya existe en el sistema', 'error');
+      } else {
+        mostrarToast('Error al guardar conductor', 'error');
+      }
+    } catch (error) {
+      mostrarToast('Error de conexión', 'error');
+    }
+  }
+</script>
+
+</body>
+</body>
+</html>

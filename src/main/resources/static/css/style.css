@@ -1,0 +1,495 @@
+@import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Alata', sans-serif;
+}
+
+:root {
+    --azul: #1d2b74;
+    --celeste: #8fb7c6;
+    --blanco: #ffffff;
+    --gris: #dbd9d9;
+    --gris-oscuro: #a0a0a0;
+    --rojo: #e74c3c;
+    --verde: #27ae60;
+}
+
+body {
+    background-color: var(--gris);
+    min-height: 100vh;
+    background-image: url('/img/Infraccion.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-blend-mode: overlay;
+}
+
+/* ============================
+   NAVBAR
+============================ */
+.navbar {
+    background-color: var(--azul);
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.navbar-logo {
+    width: 45px;
+    height: 45px;
+    background-color: var(--celeste);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.navbar-title {
+    color: var(--blanco);
+    font-size: 22px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.navbar-subtitle {
+    color: var(--celeste);
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+
+/* ============================
+    MENÚ PRINCIPAL
+============================ */
+#seccion-menu {
+    padding: 50px 40px;
+}
+
+.seccion-titulo {
+    color: var(--azul);
+    font-size: 26px;
+    text-align: center;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.seccion-subtitulo {
+    color: var(--gris-oscuro);
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.menu-card {
+    background-color: var(--blanco);
+    border-radius: 12px;
+    padding: 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.menu-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.menu-card.activo {
+    border-color: var(--azul);
+    background-color: var(--azul);
+    color: var(--blanco);
+}
+
+.menu-card.activo .menu-card-icon,
+.menu-card.activo .menu-card-label {
+    color: var(--blanco);
+}
+
+.menu-card.deshabilitado {
+    background-color: var(--gris);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.menu-card.deshabilitado:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.menu-card-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+    color: var(--azul);
+}
+
+.menu-card-label {
+    font-size: 15px;
+    color: var(--azul);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* ============================
+    CARGAR INFRACCIÓN
+============================ */
+#seccion-cargar {
+    display: none;
+    padding: 40px;
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.card {
+    background-color: var(--blanco);
+    border-radius: 12px;
+    padding: 35px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    border-bottom: 3px solid var(--azul);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-titulo {
+    color: var(--azul);
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    color: var(--azul);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--gris);
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: 'Alata', sans-serif;
+    transition: border-color 0.3s;
+    background-color: var(--blanco);
+    color: #333;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--celeste);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Tipos de infracción (checkboxes) */
+.tipos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    max-height: 220px;
+    overflow-y: auto;
+    padding: 5px;
+}
+
+.tipo-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 2px solid var(--gris);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tipo-item:hover {
+    border-color: var(--celeste);
+    background-color: #f0f7fa;
+}
+
+.tipo-item.seleccionado {
+    border-color: var(--azul);
+    background-color: #e8edf7;
+}
+
+.tipo-item input[type="checkbox"] {
+    accent-color: var(--azul);
+    width: 16px;
+    height: 16px;
+}
+
+.tipo-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-left: auto;
+}
+
+.badge-grave { background-color: #fde8e8; color: #c0392b; }
+.badge-media { background-color: #fef3e2; color: #e67e22; }
+.badge-leve  { background-color: #e8f8ef; color: #27ae60; }
+
+/* Botones */
+.btn-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    justify-content: flex-end;
+}
+
+.btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Alata', sans-serif;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background-color: var(--azul);
+    color: var(--blanco);
+}
+
+.btn-primary:hover {
+    background-color: #2a3d99;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--gris);
+    color: var(--azul);
+}
+
+.btn-secondary:hover {
+    background-color: #c5c3c3;
+}
+
+.btn-celeste {
+    background-color: var(--celeste);
+    color: var(--blanco);
+}
+
+.btn-celeste:hover {
+    background-color: #7aa8b9;
+    transform: translateY(-2px);
+}
+
+.btn-volver {
+    background: none;
+    border: 2px solid var(--azul);
+    color: var(--azul);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Alata', sans-serif;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.btn-volver:hover {
+    background-color: var(--azul);
+    color: var(--blanco);
+}
+
+/* ============================
+    VER INFRACCIONES
+============================ */
+#seccion-ver {
+    display: none;
+    padding: 40px;
+}
+
+.filtros-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filtros-label {
+    color: var(--azul);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-filtro {
+    padding: 8px 20px;
+    border: 2px solid var(--azul);
+    border-radius: 20px;
+    background: var(--blanco);
+    color: var(--azul);
+    cursor: pointer;
+    font-family: 'Alata', sans-serif;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.btn-filtro:hover,
+.btn-filtro.activo {
+    background-color: var(--azul);
+    color: var(--blanco);
+}
+
+.btn-filtro.grave.activo { background-color: #c0392b; border-color: #c0392b; }
+.btn-filtro.media.activo { background-color: #e67e22; border-color: #e67e22; }
+.btn-filtro.leve.activo  { background-color: #27ae60; border-color: #27ae60; }
+
+/* Tabla de infracciones */
+.tabla-container {
+    background-color: var(--blanco);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+.tabla-infracciones {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-infracciones thead {
+    background-color: var(--azul);
+    color: var(--blanco);
+}
+
+.tabla-infracciones th {
+    padding: 15px 20px;
+    text-align: left;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tabla-infracciones td {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--gris);
+    font-size: 14px;
+    color: #444;
+}
+
+.tabla-infracciones tbody tr:hover {
+    background-color: #f8f9ff;
+}
+
+.tabla-infracciones tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tabla-vacia {
+    text-align: center;
+    padding: 40px;
+    color: var(--gris-oscuro);
+    font-size: 15px;
+}
+
+/* Badges de tipo en la tabla */
+.chip {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin: 2px;
+}
+
+.chip-grave { background-color: #fde8e8; color: #c0392b; }
+.chip-media { background-color: #fef3e2; color: #e67e22; }
+.chip-leve  { background-color: #e8f8ef; color: #27ae60; }
+
+/* Notificación toast */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: var(--blanco);
+    font-size: 14px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.success { background-color: var(--verde); }
+.toast.error   { background-color: var(--rojo); }
+
+/* Spinner de carga */
+.spinner {
+    text-align: center;
+    padding: 30px;
+    color: var(--gris-oscuro);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .menu-grid { grid-template-columns: 1fr 1fr; }
+    .form-row  { grid-template-columns: 1fr; }
+    .tipos-grid { grid-template-columns: 1fr; }
+    .navbar { padding: 15px 20px; }
+    #seccion-cargar, #seccion-ver { padding: 20px; }
+}
+
+/* Contadores */
+.contador-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+.contador-badge.total { background: #e8edf7; color: var(--azul); }
+.contador-badge.grave { background: #fde8e8; color: #c0392b; }
+.contador-badge.media { background: #fef3e2; color: #e67e22; }
+.contador-badge.leve  { background: #e8f8ef; color: #27ae60; }

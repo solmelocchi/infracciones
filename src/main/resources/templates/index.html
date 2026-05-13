@@ -74,7 +74,7 @@
       <button class="btn-volver" onclick="mostrarMenu()">← Volver</button>
     </div>
 
-    <form id="form-infraccion" onsubmit="guardarInfraccion(event)">
+    <form id="form-infraccion">
 
       <!-- Conductor -->
       <div class="form-group">
@@ -180,7 +180,8 @@
         <button type="button" class="btn btn-secondary" onclick="mostrarMenu()">
           Cancelar
         </button>
-        <button type="submit" class="btn btn-primary">
+        <button type="button" class="btn btn-primary"
+                onclick="guardarInfraccion(event)">
           ✔ Guardar Infracción
         </button>
       </div>

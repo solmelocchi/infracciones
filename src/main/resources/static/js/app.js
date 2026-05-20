@@ -110,28 +110,59 @@ async function cargarTipos() {
 // ============================================
 
 async function guardarInfraccion(event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
+
+
 
     const conductorId = document.getElementById('select-conductor').value;
-    const descripcion = document.getElementById('input-descripcion').value;
+    const descripcion = document.getElementById('input-descripcion').value.trim();
     const importe = document.getElementById('input-importe').value;
     const fecha = document.getElementById('input-fecha').value;
-
-    // Validar que no sea fecha futura
     const hoy = new Date().toISOString().split('T')[0];
-    if (fecha > hoy) {
-        mostrarToast('❌ La fecha no puede ser futura', 'error');
-        return;
-    }
 
-    // Validar conductor seleccionado
+    // 1. Conductor obligatorio
     if (!conductorId) {
         mostrarToast('❌ Seleccioná un conductor', 'error');
+        document.getElementById('select-conductor').focus();
         return;
     }
 
-    // Obtener tipos seleccionados
-    const checkboxes = document.querySelectorAll('#tipos-grid input[type="checkbox"]:checked');
+
+    if (descripcion && descripcion.length < 5) {
+        mostrarToast('❌ La descripción debe tener al menos 5 caracteres', 'error');
+        document.getElementById('input-descripcion').focus();
+        return;
+    }
+
+    const soloTexto = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s.,;:()\-]+$/;
+    if (descripcion && !soloTexto.test(descripcion)) {
+        mostrarToast('❌ La descripción contiene caracteres no permitidos', 'error');
+        document.getElementById('input-descripcion').focus();
+        return;
+    }
+
+    // 3. Importe obligatorio y positivo
+    if (!importe || parseFloat(importe) <= 0) {
+        mostrarToast('❌ El importe debe ser mayor a 0', 'error');
+        document.getElementById('input-importe').focus();
+        return;
+    }
+
+    // 4. Fecha obligatoria y no futura
+    if (!fecha) {
+        mostrarToast('❌ La fecha es obligatoria', 'error');
+        document.getElementById('input-fecha').focus();
+        return;
+    }
+    if (fecha > hoy) {
+        mostrarToast('❌ La fecha no puede ser futura', 'error');
+        document.getElementById('input-fecha').focus();
+        return;
+    }
+
+    // 5. Al menos un tipo seleccionado
+    const checkboxes = document.querySelectorAll(
+        '#tipos-grid input[type="checkbox"]:checked');
     const tipos = Array.from(checkboxes).map(cb => ({ id: parseInt(cb.value) }));
 
     if (tipos.length === 0) {
@@ -139,6 +170,7 @@ async function guardarInfraccion(event) {
         return;
     }
 
+    // ============ GUARDAR ============
     const infraccion = {
         descripcion: descripcion,
         importe: parseFloat(importe),
@@ -157,12 +189,10 @@ async function guardarInfraccion(event) {
         if (res.ok) {
             mostrarToast('✅ Infracción guardada correctamente');
             document.getElementById('form-infraccion').reset();
-            // Limpiar checkboxes
             document.querySelectorAll('.tipo-item').forEach(item => {
                 item.classList.remove('seleccionado');
                 item.querySelector('input').checked = false;
             });
-            // Restaurar fecha máxima
             const hoyReset = new Date().toISOString().split('T')[0];
             document.getElementById('input-fecha').value = hoyReset;
             document.getElementById('input-fecha').setAttribute('max', hoyReset);

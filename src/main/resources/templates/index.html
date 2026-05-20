@@ -269,29 +269,67 @@
     const licencia = document.getElementById('nuevo-licencia').value.trim();
     const domicilio = document.getElementById('nuevo-domicilio').value.trim();
 
-    // Validaciones individuales con mensajes específicos
+    // Regex solo letras y espacios
+    const soloLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
+    // Regex alfanumérico para licencia
+    const alfanumerico = /^[a-zA-Z0-9\-]+$/;
+
+    // Nombre
     if (!nombre || nombre.length < 2) {
-      mostrarToast('El nombre es obligatorio (mínimo 2 caracteres)', 'error');
+      mostrarToast('❌ El nombre es obligatorio (mínimo 2 caracteres)', 'error');
       document.getElementById('nuevo-nombre').focus();
       return;
     }
+    if (!soloLetras.test(nombre)) {
+      mostrarToast('❌ El nombre solo puede contener letras', 'error');
+      document.getElementById('nuevo-nombre').focus();
+      return;
+    }
+
+    // Apellido
     if (!apellido || apellido.length < 2) {
-      mostrarToast(' El apellido es obligatorio (mínimo 2 caracteres)', 'error');
+      mostrarToast('❌ El apellido es obligatorio (mínimo 2 caracteres)', 'error');
       document.getElementById('nuevo-apellido').focus();
       return;
     }
-    if (!dni || dni.length < 7 || dni.length > 8) {
-      mostrarToast('El DNI debe tener 8 dígitos', 'error');
+    if (!soloLetras.test(apellido)) {
+      mostrarToast('❌ El apellido solo puede contener letras', 'error');
+      document.getElementById('nuevo-apellido').focus();
+      return;
+    }
+
+    // DNI
+    if (!dni) {
+      mostrarToast('❌ El DNI es obligatorio', 'error');
       document.getElementById('nuevo-dni').focus();
       return;
     }
+    if (!/^\d+$/.test(dni)) {
+      mostrarToast('❌ El DNI solo puede contener números', 'error');
+      document.getElementById('nuevo-dni').focus();
+      return;
+    }
+    if (dni.length < 7 || dni.length > 8) {
+      mostrarToast('❌ El DNI debe tener 7 u 8 dígitos', 'error');
+      document.getElementById('nuevo-dni').focus();
+      return;
+    }
+
+    // Licencia
     if (!licencia || licencia.length < 3) {
-      mostrarToast(' El número de licencia es obligatorio', 'error');
+      mostrarToast('❌ El número de licencia es obligatorio (mínimo 3 caracteres)', 'error');
       document.getElementById('nuevo-licencia').focus();
       return;
     }
+    if (!alfanumerico.test(licencia)) {
+      mostrarToast('❌ La licencia solo puede contener letras, números y guiones', 'error');
+      document.getElementById('nuevo-licencia').focus();
+      return;
+    }
+
+    // Domicilio
     if (!domicilio || domicilio.length < 5) {
-      mostrarToast('El domicilio es obligatorio', 'error');
+      mostrarToast('❌ El domicilio es obligatorio (mínimo 5 caracteres)', 'error');
       document.getElementById('nuevo-domicilio').focus();
       return;
     }
@@ -315,7 +353,6 @@
         const nuevo = await res.json();
         mostrarToast(`✅ Conductor ${nombre} ${apellido} guardado`);
 
-        // Agregar al select y seleccionarlo automáticamente
         const select = document.getElementById('select-conductor');
         const option = document.createElement('option');
         option.value = nuevo.id;
@@ -325,12 +362,12 @@
 
         toggleFormConductor();
       } else if (res.status === 500) {
-        mostrarToast('El DNI ya existe en el sistema', 'error');
+        mostrarToast('❌ El DNI ya existe en el sistema', 'error');
       } else {
-        mostrarToast('Error al guardar conductor', 'error');
+        mostrarToast('❌ Error al guardar conductor', 'error');
       }
     } catch (error) {
-      mostrarToast('Error de conexión', 'error');
+      mostrarToast('❌ Error de conexión', 'error');
     }
   }
 </script>

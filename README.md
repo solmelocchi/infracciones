@@ -35,7 +35,6 @@ spring.datasource.username=root
 spring.datasource.password=1234
 ```
 
-
 ## Correr el proyecto
 1. Clonar el repositorio
 2. Configurar el `application.properties` con tu password de MySQL
@@ -50,3 +49,6 @@ Paginación con Pageable
 Auditoría automática con Hibernate Envers
 Frontend HTML/CSS/JS integrado
 Validación de fechas y campos obligatorios
+
+## Diagrama a Codificar
+<img width="1247" height="791" alt="DiagramaUML" src="https://github.com/user-attachments/assets/bbc65be3-9ecd-433e-a04d-e563ce849143" />
